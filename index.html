@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>blaxTARLINES — Venice 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafafa;
+    --fg: #1a1a1a;
+    --muted: #999;
+    --frame-bg: #e9e9e9;
+    --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --sz-xs: 10px;
+    --sz-sm: 11px;
+    --sz-base: 12px;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: var(--sz-base);
+    font-weight: 400;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    z-index: 100;
+    background: var(--bg);
+  }
+
+  .nav-logo img {
+    height: 20px;
+    width: auto;
+    display: block;
+  }
+
+  .nav-right {
+    font-size: var(--sz-sm);
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    color: var(--fg);
+    text-decoration: none;
+  }
+
+  /* ── SIDE LABELS ── */
+  .side-label {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: var(--sz-sm);
+    letter-spacing: 0.01em;
+    color: var(--fg);
+    z-index: 50;
+    pointer-events: none;
+    margin-top: 18px;
+  }
+
+  .side-label.left { left: 18px; }
+  .side-label.right { right: 18px; font-variant-numeric: tabular-nums; }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 36px;
+    padding-bottom: 32px;
+  }
+
+  /* ── STREAM SECTION ── */
+  .stream-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 80px 16px;
+  }
+
+  .stream-frame {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    background: var(--frame-bg);
+    max-height: calc(100vh - 220px);
+    overflow: hidden;
+  }
+
+  /* Corner crosses */
+  .cross {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+  }
+  .cross::before, .cross::after {
+    content: '';
+    position: absolute;
+    background: #a0a0a0;
+  }
+  .cross::before { width: 1px; height: 100%; left: 50%; top: 0; }
+  .cross::after  { height: 1px; width: 100%; top: 50%; left: 0; }
+
+  .cross-tl { top: 16px; left: 16px; }
+  .cross-tr { top: 16px; right: 16px; }
+  .cross-bl { bottom: 16px; left: 16px; }
+  .cross-br { bottom: 16px; right: 16px; }
+
+  /* ── COUNTDOWN ── */
+  .countdown-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    user-select: none;
+  }
+
+  .countdown-label {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #aaa;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+
+  .countdown-digits {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .countdown-num {
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: #1a1a1a;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .countdown-unit-label {
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: #bbb;
+    text-transform: uppercase;
+  }
+
+  .countdown-date {
+    margin-top: 22px;
+    font-size: 9px;
+    color: #ccc;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── LIVE BADGE ── */
+  .live-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,0,0,0.55);
+    border-radius: 4px;
+    padding: 3px 8px;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff3b30;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+
+  .live-text {
+    color: #fff;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+
+  /* Vimeo iframe */
+  .vimeo-embed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* ── INFO SECTION ── */
+  .info-section {
+    display: flex;
+    justify-content: center;
+    padding: 0 80px 60px;
+  }
+
+  .info-inner {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    gap: 0;
+  }
+
+  .info-left {
+    flex: 0 0 50%;
+    padding-right: 24px;
+  }
+
+  .info-left .project-name {
+    font-size: var(--sz-sm);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  .info-right {
+    flex: 0 0 50%;
+  }
+
+  .info-right .headline {
+    font-size: var(--sz-sm);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .info-right .body {
+    font-size: var(--sz-xs);
+    color: #555;
+    line-height: 1.65;
+    letter-spacing: 0.005em;
+    max-width: 320px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    z-index: 100;
+    background: var(--bg);
+  }
+
+  footer a {
+    font-size: var(--sz-sm);
+    color: var(--fg);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+
+  footer a:hover { text-decoration: underline; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    .side-label { display: none; }
+
+    .stream-section {
+      padding: 16px 16px 12px;
+    }
+
+    .stream-frame {
+      max-height: calc(100vw - 32px);   /* keep 4:3 within viewport on narrow screens */
+    }
+
+    .countdown-num {
+      font-size: 24px;
+    }
+
+    .countdown-digits {
+      gap: 16px;
+    }
+
+    .countdown-date {
+      font-size: 8px;
+      padding: 0 12px;
+    }
+
+    .info-section {
+      padding: 0 16px 60px;
+    }
+
+    .info-inner {
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .info-left,
+    .info-right {
+      flex: none;
+      width: 100%;
+      padding-right: 0;
+    }
+
+    .info-right .body {
+      max-width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo.jpg" alt="blaxTARLINES">
+  </a>
+  <a class="nav-right" href="#about">About</a>
+</nav>
+
+<!-- SIDE LABELS -->
+<span class="side-label left" id="day-label">Sunday</span>
+<span class="side-label right" id="clock-label">00:00:00</span>
+
+<!-- MAIN -->
+<main>
+  <div class="stream-section">
+    <div class="stream-frame" id="stream-frame">
+      <!-- Corner crosses (shown in countdown mode) -->
+      <div class="cross cross-tl" id="cross-tl"></div>
+      <div class="cross cross-tr" id="cross-tr"></div>
+      <div class="cross cross-bl" id="cross-bl"></div>
+      <div class="cross cross-br" id="cross-br"></div>
+
+      <!-- Countdown (default state) -->
+      <div class="countdown-inner" id="countdown-view">
+        <div class="countdown-label" id="countdown-label">Next livestream in</div>
+        <div class="countdown-digits" id="countdown-digits">
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cd-d">00</span>
+            <span class="countdown-unit-label">days</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cd-h">00</span>
+            <span class="countdown-unit-label">hrs</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cd-m">00</span>
+            <span class="countdown-unit-label">min</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cd-s">00</span>
+            <span class="countdown-unit-label">sec</span>
+          </div>
+        </div>
+        <div class="countdown-date" id="countdown-date"></div>
+      </div>
+
+      <!-- Live view (hidden by default) -->
+      <div id="live-view" style="display:none; position:absolute; inset:0;">
+        <iframe
+          id="vimeo-iframe"
+          class="vimeo-embed"
+          src=""
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+        <div class="live-badge">
+          <div class="live-dot"></div>
+          <span class="live-text">LIVE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-inner">
+      <div class="info-left">
+        <div class="project-name">Blaxtarlines @ Venice</div>
+      </div>
+      <div class="info-right">
+        <div class="headline">
+          blaxTARLINES Live<br>
+          Venice Sessions, Vol. 01<br>
+          May 10, 2026 — 20:00 CET
+        </div>
+        <div class="body">
+          An intimate live broadcast from Venice — art, sound, and conversation at the intersection of culture and space. Join us for the first edition of the blaxTARLINES Venice Sessions, streaming exclusively here and on Vimeo.
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <a href="mailto:blaxtarlines@gmail.com">blaxtarlines@gmail.com</a>
+  <a href="https://www.instagram.com/blaxtarlines?igsh=ejc3OWg4Mnk1aHll" target="_blank" rel="noopener">IG ↗</a>
+</footer>
+
+<script>
+  // ── Config ────────────────────────────────────────────────────────────────
+  const CONFIG = {
+    nextStream: '2026-05-10T20:00:00',   // ISO datetime of next stream (local time)
+    isLive: false,                         // Set to true when streaming
+    vimeoId: '',                           // Paste Vimeo video/event ID when live
+  };
+
+  // ── Live clock + day label ────────────────────────────────────────────────
+  const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const dayEl   = document.getElementById('day-label');
+  const clockEl = document.getElementById('clock-label');
+
+  function tickClock() {
+    const now = new Date();
+    dayEl.textContent = DAYS[now.getDay()];
+    clockEl.textContent = [now.getHours(), now.getMinutes(), now.getSeconds()]
+      .map(n => String(n).padStart(2, '0')).join(':');
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  // ── Stream frame ──────────────────────────────────────────────────────────
+  const countdownView = document.getElementById('countdown-view');
+  const liveView      = document.getElementById('live-view');
+  const vimeoIframe   = document.getElementById('vimeo-iframe');
+  const crosses       = ['cross-tl','cross-tr','cross-bl','cross-br'].map(id => document.getElementById(id));
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function updateCountdown() {
+    const target = new Date(CONFIG.nextStream);
+    const diff   = target - Date.now();
+
+    if (diff <= 0) {
+      document.getElementById('countdown-label').textContent = 'Stream starting now…';
+      document.getElementById('countdown-digits').style.display = 'none';
+      document.getElementById('countdown-date').textContent = '';
+      return;
+    }
+
+    const totalSec = Math.floor(diff / 1000);
+    const d = Math.floor(totalSec / 86400);
+    const h = Math.floor((totalSec % 86400) / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+
+    document.getElementById('cd-d').textContent = pad(d);
+    document.getElementById('cd-h').textContent = pad(h);
+    document.getElementById('cd-m').textContent = pad(m);
+    document.getElementById('cd-s').textContent = pad(s);
+
+    document.getElementById('countdown-date').textContent =
+      target.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) +
+      ' · ' +
+      target.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function initStreamFrame() {
+    if (CONFIG.isLive && CONFIG.vimeoId) {
+      // Show Vimeo embed
+      vimeoIframe.src = `https://player.vimeo.com/video/${CONFIG.vimeoId}?autoplay=1&loop=0&title=0&byline=0&portrait=0`;
+      countdownView.style.display = 'none';
+      crosses.forEach(el => el.style.display = 'none');
+      liveView.style.display = 'block';
+    } else {
+      // Show countdown
+      liveView.style.display = 'none';
+      countdownView.style.display = 'flex';
+      crosses.forEach(el => el.style.display = 'block');
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+  }
+
+  initStreamFrame();
+</script>
+</body>
+</html>
