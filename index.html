@@ -332,6 +332,17 @@
 
   footer a:hover { text-decoration: underline; }
 
+  #footer-top {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  #footer-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   /* ── MOBILE ── */
   @media (max-width: 600px) {
     .side-label { display: none; }
@@ -517,7 +528,7 @@
 <!-- FOOTER -->
 <footer>
   <a href="mailto:blaxtarlines@gmail.com">blaxtarlines@gmail.com</a>
-  <a href="#top">Top ↑&#xFE0E;</a>
+  <a id="footer-top" href="#" onclick="event.preventDefault();window.scrollTo({top:0,behavior:'smooth'})">Top ↑&#xFE0E;</a>
   <div style="display:flex;gap:16px;align-items:center;">
     <a href="https://web.facebook.com/blaxtarlines" target="_blank" rel="noopener">FB ↗&#xFE0E;</a>
     <a href="https://www.instagram.com/blaxtarlines?igsh=ejc3OWg4Mnk1aHll" target="_blank" rel="noopener">IG ↗&#xFE0E;</a>
@@ -601,6 +612,13 @@
   }
 
   initStreamFrame();
+
+  // Show "Top" link only when About section is visible
+  const footerTop = document.getElementById('footer-top');
+  const aboutSection = document.getElementById('about');
+  new IntersectionObserver(([entry]) => {
+    footerTop.classList.toggle('visible', entry.isIntersecting);
+  }, { threshold: 0.05 }).observe(aboutSection);
 </script>
 </body>
 </html>
