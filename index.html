@@ -20,8 +20,10 @@
     --sz-base: 15px;
   }
 
+  html { scroll-behavior: smooth; }
+
   html, body {
-    height: 100%;
+    min-height: 100%;
     background: var(--bg);
     color: var(--fg);
     font-family: var(--font);
@@ -268,6 +270,46 @@
     max-width: 320px;
   }
 
+  /* ── ABOUT SECTION ── */
+  .about-section {
+    padding: 160px 80px 96px;
+    display: flex;
+    justify-content: center;
+    background: var(--bg);
+  }
+
+  .about-inner {
+    width: 100%;
+    max-width: 720px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #2a2a2a;
+  }
+
+  .about-inner p {
+    margin-bottom: 18px;
+  }
+
+  .about-quote {
+    font-style: italic;
+    color: #444;
+  }
+
+  .about-cite {
+    display: block;
+    font-style: normal;
+    color: #888;
+    font-size: 13px;
+    margin-top: 4px;
+    letter-spacing: 0.01em;
+  }
+
+  .about-tagline {
+    margin-top: 28px;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+
   /* ── FOOTER ── */
   footer {
     position: fixed;
@@ -343,13 +385,21 @@
     .info-right .body {
       max-width: 100%;
     }
+
+    .about-section {
+      padding: 120px 16px 96px;
+    }
+
+    .about-inner {
+      font-size: 14px;
+    }
   }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav>
+<nav id="top">
   <a class="nav-logo" href="/">
     <img src="logo.png" alt="blaxTARLINES KUMASI">
   </a>
@@ -428,9 +478,45 @@
   </div>
 </main>
 
+<!-- ABOUT -->
+<section id="about" class="about-section">
+  <div class="about-inner">
+    <p class="about-quote">"After the revolution, who is going to pick up the garbage on Monday morning?"
+      <span class="about-cite">—Mierle Laderman Ukeles, 1969</span>
+    </p>
+
+    <p class="about-quote">"Who shall be Artists and who shall be Servants in the world to come? Or shall we all be artists and all serve?"
+      <span class="about-cite">—W. E. B. Du Bois, 1920</span>
+    </p>
+
+    <p>blaxTARLINES! You may call us an open-source art coalition or an art-labour movement. Both designations fit the bill. We are also a pedagogical experiment, a support hub, a sharing economy, and an underground emancipation network. We are hosted by Ghana's foremost art college at the Kwame Nkrumah University of Science and Technology (KNUST) Kumasi, but there are many more "stations" along our "railroads", dispersed across five continents. Kwame Nkrumah's maxim, the gown must go to town, is our watchword.</p>
+
+    <p>We are inspired by the non-proprietary art practice and pedagogical projects of kąrî'kạchä seid'ou. Our operations are tactical responses to crisis points and moments in the distribution networks of global contemporary art, especially in Ghana and several regions on the African continent, where the lack of public and private support systems for the art field is the rule rather than the exception. We are also inspired by key moments in emancipatory politics across history and cultures.</p>
+
+    <p>The coalition has African Unity in sight, but we approach it by other means. We are a growing alliance of Peg Leg Joes or Harriet Tubmans; our solidarity is also the proof of the crises we embody; as we "follow the drinkin' gourd", our North Star is a black hole of uncertainties and paradoxes; and fugitivity, our hallmark:</p>
+
+    <p class="about-quote">When the sun comes back, and the first quail calls [. . .]<br>
+      Well the river bank makes a mighty good road<br>
+      Dead trees will show you the way<br>
+      Left foot, peg foot, travellin' on . . .
+    </p>
+
+    <p>We are suspicious of ready-mades, so we hack them, translate, and redistribute – global contemporary art and its network of 3 Ms (Museum, Market, and Media) included. That is our response to Tania Bruguera's call to return Duchamp's urinal from the art museum to the lavatory. We have seen our comrade Ibrahim Mahama chart this path admirably in Tamale, a location previously written off the default routes of international contemporary art. Currently, blaxxKITCHEN, blaxxRADIO, blaxxMEDIA, and blaxxPROJECTS, our open-source set-ups, are a significant part of the resource hacking and repatriation job – picking up the garbage on Monday morning.</p>
+
+    <p>As fugitives and hackers, the Ghanaian Sankᴐfa ("go back and fetch it") bird is a welcome muse, but we re-read the legend away from pure return-to-past nostalgia. Rather, we imagine the Sankᴐfa bird "going back" to grasp what the present might have "forgotten" from futures yet to come, and vice versa. Taking the position of the Sankᴐfa bird forces our hand to alter verbs, asterisk adjectives and adverbs, and hyphenate pronouns, but we may hence alter and multiply the nouns and time signatures of existing practices and those yet to come. The subjunctive is our future, our past, our present, our joy.</p>
+
+    <p>Sacrifice may be a morally freighted word today, but we reclaim it to describe the work of the Harriet Tubmans, the Peg Leg Joes, and the underground "conductors", "agents", "escorts", "station masters", and "parcels" on our "railroads". The coalition's core is a horizontal network of teachers, labourers, artists, curators, students, technicians, and co-inhabitants. They work across disciplines and span generations. Today, blaxTARLINES plays leading roles in the growth and sustenance of criticality in art practice in Ghana and beyond. We build hard and soft infrastructural support for both artworld practitioners and allied communities. These include co-developing living curricula, experimental hubs, residencies, social networks, workspaces, start-ups, cultural platforms, and public-access art spaces across Ghana, and linking them to other regions in Africa and elsewhere.</p>
+
+    <p>We celebrate emergence. We generate, train on, and share contingent tools, recipes, codes, systems, lifeforms, models, prompts, and means that are "impossible for someone to have and another to lack". Put another way, we "transform art from commodity to gift" – hopefully, a non-reciprocal gift!</p>
+
+    <p class="about-tagline">blaxTARLINES! We hack, we liberate, we share, we fail, we resurrect!</p>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <a href="mailto:blaxtarlines@gmail.com">blaxtarlines@gmail.com</a>
+  <a href="#top">Top ↑&#xFE0E;</a>
   <div style="display:flex;gap:16px;align-items:center;">
     <a href="https://web.facebook.com/blaxtarlines" target="_blank" rel="noopener">FB ↗&#xFE0E;</a>
     <a href="https://www.instagram.com/blaxtarlines?igsh=ejc3OWg4Mnk1aHll" target="_blank" rel="noopener">IG ↗&#xFE0E;</a>
