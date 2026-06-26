@@ -611,8 +611,9 @@
   // ── Config ────────────────────────────────────────────────────────────────
   const CONFIG = {
     nextStream: '2026-05-29T20:00:00',   // ISO datetime of next stream (local time)
-    isLive: false,                         // Set to true when streaming
-    vimeoId: '',                           // Paste Vimeo video/event ID when live
+    isLive: true,                          // Set to true when streaming
+    vimeoId: '6021214',                    // Vimeo video/event ID when live
+    isEvent: true,                         // true = Vimeo Live Event (uses /event/{id}/embed)
   };
 
   // ── Live clock + day label ────────────────────────────────────────────────
@@ -667,8 +668,10 @@
 
   function initStreamFrame() {
     if (CONFIG.isLive && CONFIG.vimeoId) {
-      // Show Vimeo embed
-      vimeoIframe.src = `https://player.vimeo.com/video/${CONFIG.vimeoId}?autoplay=1&loop=0&title=0&byline=0&portrait=0`;
+      // Show Vimeo embed (Live Event uses /event/{id}/embed, regular video uses /video/{id})
+      vimeoIframe.src = CONFIG.isEvent
+        ? `https://player.vimeo.com/event/${CONFIG.vimeoId}/embed?autoplay=1&title=0&byline=0&portrait=0`
+        : `https://player.vimeo.com/video/${CONFIG.vimeoId}?autoplay=1&loop=0&title=0&byline=0&portrait=0`;
       countdownView.style.display = 'none';
       crosses.forEach(el => el.style.display = 'none');
       liveView.style.display = 'block';
